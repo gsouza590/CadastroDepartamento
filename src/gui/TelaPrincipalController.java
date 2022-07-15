@@ -4,6 +4,7 @@ package gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 import application.Main;
 import gui.util.Alerts;
@@ -16,6 +17,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import model.services.DepartamentoService;
 
 public class TelaPrincipalController implements Initializable{
 
@@ -35,12 +37,15 @@ public class TelaPrincipalController implements Initializable{
 	
 	@FXML
 	public void onMenuItemDepartamentoAction() {
-		System.out.println("onMenuItemDepartamentoAction");
+		carregarView("/gui/ListaDepartamento.fxml", (ListaDepartamentoController controller)-> {
+			controller.setDepartamentoService(new DepartamentoService());
+			controller.atualizaTableView();
+		}  );
 	}
 	
 	@FXML
 	public void onMenuItemSobreAction() {
-		carregarView("/gui/TelaSobre.fxml");
+		carregarView("/gui/TelaSobre.fxml", x->{});
 	}
 	
 	@Override
@@ -48,7 +53,7 @@ public class TelaPrincipalController implements Initializable{
 		
 	}
 
-	private synchronized void carregarView(String nomeAbsoluto) {
+	private synchronized <T> void carregarView(String nomeAbsoluto, Consumer<T> iniciaAcao) {
 			try {
 			FXMLLoader loader = new FXMLLoader (getClass().getResource(nomeAbsoluto));
 			VBox novoVbox = loader.load();
@@ -61,6 +66,9 @@ public class TelaPrincipalController implements Initializable{
 			
 			principalVBox.getChildren().add(mainMenu);
 			principalVBox.getChildren().addAll(novoVbox.getChildren());
+			
+			T controller= loader.getController();
+			iniciaAcao.accept(controller);
 			
 		} catch (IOException e) {
 			Alerts.showAlert("IOException", "Erro carregamento da pagina", e.getMessage(), AlertType.ERROR);
