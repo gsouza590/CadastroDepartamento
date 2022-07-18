@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import com.sun.javafx.scene.control.skin.Utils;
 
 import application.Main;
+import gui.Listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Utilitario;
 import javafx.collections.FXCollections;
@@ -28,7 +29,7 @@ import javafx.stage.Stage;
 import model.entities.Departamento;
 import model.services.DepartamentoService;
 
-public class ListaDepartamentoController implements Initializable {
+public class ListaDepartamentoController implements Initializable, DataChangeListener {
 
 	private DepartamentoService service;
 
@@ -92,6 +93,7 @@ public class ListaDepartamentoController implements Initializable {
 		DepartamentoFormController controlador = loader.getController();
 		controlador.setDepartamento(obj);
 		controlador.setDepartamentoService(new DepartamentoService());
+		controlador.inscreveDCL(this);
 		controlador.atualizaFormData();
 		
 		Stage dialogoStage = new Stage();
@@ -104,6 +106,12 @@ public class ListaDepartamentoController implements Initializable {
 		}catch(IOException e) {
 			Alerts.showAlert("IOException", "Erro carregar View", e.getMessage(), AlertType.ERROR);
 		}
+	}
+
+	@Override
+	public void onMudancaDados() {
+		atualizaTableView();
+		
 	}
 
 }

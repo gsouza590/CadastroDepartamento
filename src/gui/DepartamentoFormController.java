@@ -1,9 +1,12 @@
 package gui;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import db.DbException;
+import gui.Listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import gui.util.Utilitario;
@@ -20,7 +23,10 @@ import model.services.DepartamentoService;
 public class DepartamentoFormController implements Initializable{
 	
 	private Departamento dep;
+	
 	private DepartamentoService service;
+	
+	private List<DataChangeListener> dataChangeListeners= new ArrayList<>();
 	
 	@FXML
 	private TextField txtId;
@@ -44,6 +50,10 @@ public class DepartamentoFormController implements Initializable{
 		this.service= service;
 	}
 	
+	public void inscreveDCL(DataChangeListener listener) {
+		dataChangeListeners.add(listener);
+	}
+	
 	@FXML
 	public void onBtSalvarAction(ActionEvent event) {
 		if(dep == null) {
@@ -56,9 +66,16 @@ public class DepartamentoFormController implements Initializable{
 		try {
 		dep = getDataFormulario();
 		service.salvarOuAtualizar(dep);
+		notificaDCL();
 		Utilitario.stageAtual(event).close();
 		}catch(DbException e) {
 			Alerts.showAlert("Erro salvando objeto", null, e.getMessage(), AlertType.ERROR);
+		}
+	}
+	
+	private void notificaDCL() {
+		for(DataChangeListener l : dataChangeListeners) {
+			l.onMudancaDados();
 		}
 	}
 	
