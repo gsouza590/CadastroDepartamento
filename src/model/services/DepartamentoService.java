@@ -9,7 +9,7 @@ import model.entities.Departamento;
 
 public class DepartamentoService {
 
-	private DepartamentoDao dao = DaoFactory.createDepartmentDao();
+	private DepartamentoDao dao = DaoFactory.createDepartamentoDao();
 	
 	public List<Departamento> findAll(){
 			return dao.findAll();

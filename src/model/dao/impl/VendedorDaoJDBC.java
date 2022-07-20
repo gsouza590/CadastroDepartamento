@@ -30,8 +30,8 @@ public class VendedorDaoJDBC implements VendedorDao {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
-					"INSERT INTO seller "
-					+ "(Name, Email, BirthDate, BaseSalary, DepartamentoId) "
+					"INSERT INTO vendedor "
+					+ "(Nome, Email, DataNasc, SalarioBase, DepartamentoId) "
 					+ "VALUES "
 					+ "(?, ?, ?, ?, ?)",
 					Statement.RETURN_GENERATED_KEYS);
@@ -70,7 +70,7 @@ public class VendedorDaoJDBC implements VendedorDao {
 		try {
 			st = conn.prepareStatement(
 					"UPDATE seller "
-					+ "SET Name = ?, Email = ?, BirthDate = ?, BaseSalary = ?, DepartamentoId = ? "
+					+ "SET Nome = ?, Email = ?, DataNasc = ?, SalarioBase = ?, DepartamentoId = ? "
 					+ "WHERE Id = ?");
 			
 			st.setString(1, obj.getNome());
@@ -94,7 +94,7 @@ public class VendedorDaoJDBC implements VendedorDao {
 	public void deleteById(Integer id) {
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("DELETE FROM seller WHERE Id = ?");
+			st = conn.prepareStatement("DELETE FROM vendedor WHERE Id = ?");
 			
 			st.setInt(1, id);
 			
@@ -114,16 +114,16 @@ public class VendedorDaoJDBC implements VendedorDao {
 		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement(
-					"SELECT seller.*,Departamento.Name as DepName "
-					+ "FROM seller INNER JOIN Departamento "
-					+ "ON seller.DepartamentoId = Departamento.Id "
-					+ "WHERE seller.Id = ?");
+					"SELECT vendedor.*,departamento.Nome as DepNome "
+					+ "FROM vendedor INNER JOIN departamento "
+					+ "ON vendedor.DepartamentoId = departamento.Id "
+					+ "WHERE vendedor.Id = ?");
 			
 			st.setInt(1, id);
 			rs = st.executeQuery();
 			if (rs.next()) {
 				Departamento dep = instantiateDepartamento(rs);
-				Vendedor obj = instantiateSeller(rs, dep);
+				Vendedor obj = instantiateVendedor(rs, dep);
 				return obj;
 			}
 			return null;
@@ -137,12 +137,12 @@ public class VendedorDaoJDBC implements VendedorDao {
 		}
 	}
 
-	private Vendedor instantiateSeller(ResultSet rs, Departamento dep) throws SQLException {
+	private Vendedor instantiateVendedor(ResultSet rs, Departamento dep) throws SQLException {
 		Vendedor obj = new Vendedor();
 		obj.setId(rs.getInt("Id"));
 		obj.setNome(rs.getString("Nome"));
 		obj.setEmail(rs.getString("Email"));
-		obj.setBaseSalario(rs.getDouble("BaseSalario"));
+		obj.setSalarioBase(rs.getDouble("SalarioBase"));
 		obj.setDataNasc(rs.getDate("DataNasc"));
 		obj.setDepartamento(dep);
 		return obj;
@@ -161,10 +161,10 @@ public class VendedorDaoJDBC implements VendedorDao {
 		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement(
-					"SELECT seller.*,Departamento.Name as DepName "
-					+ "FROM seller INNER JOIN Departamento "
-					+ "ON seller.DepartamentoId = Departamento.Id "
-					+ "ORDER BY Name");
+					"SELECT vendedor.*,departamento.Nome as DepNome "
+					+ "FROM vendedor INNER JOIN departamento "
+					+ "ON vendedor.DepartamentoId = departamento.Id "
+					+ "ORDER BY Nome");
 			
 			rs = st.executeQuery();
 			
@@ -180,7 +180,7 @@ public class VendedorDaoJDBC implements VendedorDao {
 					map.put(rs.getInt("DepartamentoId"), dep);
 				}
 				
-				Vendedor obj = instantiateSeller(rs, dep);
+				Vendedor obj = instantiateVendedor(rs, dep);
 				list.add(obj);
 			}
 			return list;
@@ -199,11 +199,11 @@ public class VendedorDaoJDBC implements VendedorDao {
 		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement(
-					"SELECT seller.*,Departamento.Name as DepName "
-					+ "FROM seller INNER JOIN Departamento "
-					+ "ON seller.DepartamentoId = Departamento.Id "
+					"SELECT vendedor.*,departamento.Nome as DepNome "
+					+ "FROM vendedor INNER JOIN departamento "
+					+ "ON vendedor.DepartamentoId = departamento.Id "
 					+ "WHERE DepartamentoId = ? "
-					+ "ORDER BY Name");
+					+ "ORDER BY Nome");
 			
 			st.setInt(1, Departamento.getId());
 			
@@ -221,7 +221,7 @@ public class VendedorDaoJDBC implements VendedorDao {
 					map.put(rs.getInt("DepartamentoId"), dep);
 				}
 				
-				Vendedor obj = instantiateSeller(rs, dep);
+				Vendedor obj = instantiateVendedor(rs, dep);
 				list.add(obj);
 			}
 			return list;

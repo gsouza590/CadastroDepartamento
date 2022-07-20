@@ -29,13 +29,13 @@ public class DepartamentoDaoJDBC implements DepartamentoDao {
 		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement(
-				"SELECT * FROM department WHERE Id = ?");
+				"SELECT * FROM departamento WHERE Id = ?");
 			st.setInt(1, id);
 			rs = st.executeQuery();
 			if (rs.next()) {
 				Departamento obj = new Departamento();
 				obj.setId(rs.getInt("Id"));
-				obj.setNome(rs.getString("Name"));
+				obj.setNome(rs.getString("Nome"));
 				return obj;
 			}
 			return null;
@@ -55,7 +55,7 @@ public class DepartamentoDaoJDBC implements DepartamentoDao {
 		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement(
-				"SELECT * FROM department ORDER BY Name");
+				"SELECT * FROM departamento ORDER BY Nome");
 			rs = st.executeQuery();
 
 			List<Departamento> list = new ArrayList<>();
@@ -63,7 +63,7 @@ public class DepartamentoDaoJDBC implements DepartamentoDao {
 			while (rs.next()) {
 				Departamento obj = new Departamento();
 				obj.setId(rs.getInt("Id"));
-				obj.setNome(rs.getString("Name"));
+				obj.setNome(rs.getString("Nome"));
 				list.add(obj);
 			}
 			return list;
@@ -82,8 +82,8 @@ public class DepartamentoDaoJDBC implements DepartamentoDao {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
-				"INSERT INTO department " +
-				"(Name) " +
+				"INSERT INTO departamento " +
+				"(Nome) " +
 				"VALUES " +
 				"(?)", 
 				Statement.RETURN_GENERATED_KEYS);
@@ -116,8 +116,8 @@ public class DepartamentoDaoJDBC implements DepartamentoDao {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
-				"UPDATE department " +
-				"SET Name = ? " +
+				"UPDATE departamento " +
+				"SET Nome = ? " +
 				"WHERE Id = ?");
 
 			st.setString(1, obj.getNome());
@@ -138,7 +138,7 @@ public class DepartamentoDaoJDBC implements DepartamentoDao {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
-				"DELETE FROM department WHERE Id = ?");
+				"DELETE FROM departamento WHERE Id = ?");
 
 			st.setInt(1, id);
 
