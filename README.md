@@ -8,8 +8,19 @@ O Cadastro de Departamentos é uma aplicação Java construída durante o curso 
 
 O programa tem como objeto o cadastramento dos Vendedores, com suas informações básicas, e seus respectivos departamentos. Com uma interface simples, os dados ficam armazenados em um banco de dados, para futuras consultas.
 
-## Layout mobile
-![Cadastro 1]() ![Cadastro 2]()
+## Layout
+![Cadastro 1](https://github.com/gsouza590/CadastroDepartamento/blob/master/assets/Imagem1.png) ![Cadastro 2](https://github.com/gsouza590/CadastroDepartamento/blob/master/assets/Imagem3.png)
+
+## Video 
+
+
+
+https://user-images.githubusercontent.com/72672156/180303997-b64b6cb5-8577-40dd-b248-c7afefe4e352.mp4
+
+
+
+
+
 
 
 # Tecnologias utilizadas
