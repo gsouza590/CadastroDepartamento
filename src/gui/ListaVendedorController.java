@@ -1,5 +1,6 @@
 package gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +17,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -24,8 +27,11 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Vendedor;
+import model.services.DepartamentoService;
 import model.services.VendedorService;
 
 public class ListaVendedorController implements Initializable, DataChangeListener {
@@ -66,7 +72,7 @@ public class ListaVendedorController implements Initializable, DataChangeListene
 	public void onBTNovoAction(ActionEvent event) {
 		Stage parentStage = Utilitario.stageAtual(event);
 		Vendedor obj = new Vendedor();
-		criarFormDialogo(obj, "/gui/FormularioDep.fxml", parentStage);
+		criarFormDialogo(obj, "/gui/FormularioVend.fxml", parentStage);
 	}
 
 	public void setVendedorService(VendedorService service) {
@@ -110,26 +116,29 @@ public class ListaVendedorController implements Initializable, DataChangeListene
 	}
 
 	private void criarFormDialogo(Vendedor obj, String nomeAbsoluto, Stage parentStage) {
-//		try {
-//			FXMLLoader loader = new FXMLLoader(getClass().getResource(nomeAbsoluto));
-//			Pane pane = loader.load();
-//
-//			VendedorFormController controlador = loader.getController();
-//			controlador.setVendedor(obj);
-//			controlador.setVendedorService(new VendedorService());
-//			controlador.inscreveDCL(this);
-//			controlador.atualizaFormData();
-//
-//			Stage dialogoStage = new Stage();
-//			dialogoStage.setTitle("Nome do Vendedor");
-//			dialogoStage.setScene(new Scene(pane));
-//			dialogoStage.setResizable(false);
-//			dialogoStage.initOwner(parentStage);
-//			dialogoStage.initModality(Modality.WINDOW_MODAL);
-//			dialogoStage.showAndWait();
-//		} catch (IOException e) {
-//			Alerts.showAlert("IOException", "Erro carregar View", e.getMessage(), AlertType.ERROR);
-//		}
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(nomeAbsoluto));
+			Pane pane = loader.load();
+
+			VendedorFormController controlador = loader.getController();
+			controlador.setVendedor(obj);
+			controlador.setServices(new VendedorService(), new DepartamentoService());
+			controlador.associaObjetos();
+			controlador.inscreveDCL(this);
+			controlador.atualizaFormData();
+
+			Stage dialogoStage = new Stage();
+			dialogoStage.setTitle("Nome do Vendedor");
+			dialogoStage.setScene(new Scene(pane));
+			dialogoStage.setResizable(false);
+			dialogoStage.initOwner(parentStage);
+			dialogoStage.initModality(Modality.WINDOW_MODAL);
+			dialogoStage.showAndWait();
+		} catch (IOException e) {
+			e.printStackTrace();
+			Alerts.showAlert("IOException", "Erro carregar View", e.getMessage(), AlertType.ERROR);
+			
+		}
 	}
 
 	private void iniciaBotaoEdicao() {
@@ -148,7 +157,7 @@ public class ListaVendedorController implements Initializable, DataChangeListene
 
 				setGraphic(b);
 				b.setOnAction(
-						evento -> criarFormDialogo(obj, "/gui/FormularioDep.fxml", Utilitario.stageAtual(evento)));
+						evento -> criarFormDialogo(obj, "/gui/FormularioVend.fxml", Utilitario.stageAtual(evento)));
 
 			}
 

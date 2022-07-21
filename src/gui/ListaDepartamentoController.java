@@ -115,6 +115,7 @@ public class ListaDepartamentoController implements Initializable, DataChangeLis
 			dialogoStage.initModality(Modality.WINDOW_MODAL);
 			dialogoStage.showAndWait();
 		} catch (IOException e) {
+			e.printStackTrace();
 			Alerts.showAlert("IOException", "Erro carregar View", e.getMessage(), AlertType.ERROR);
 		}
 	}

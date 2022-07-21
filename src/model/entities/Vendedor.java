@@ -52,6 +52,7 @@ public class Vendedor implements Serializable {
 		this.email = email;
 	}
 
+
 	public Date getDataNasc() {
 		return dataNasc;
 	}
@@ -60,7 +61,7 @@ public class Vendedor implements Serializable {
 		this.dataNasc = dataNasc;
 	}
 
-	public Double getBaseSalario() {
+	public Double getSalarioBase() {
 		return salarioBase;
 	}
 
